@@ -1,7 +1,7 @@
 {
   "name": "nexus",
   "version": "0.1.1",
-  "description": "Cross-chain bridge monitor — tracks asset flows between Solana and EVM chains, detects anomalies using Claude",
+  "description": "Solana bridge-ingress console that ranks deployable capital by stablecoin mix and corridor share",
   "license": "MIT",
   "repository": {
     "type": "git",
