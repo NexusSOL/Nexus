@@ -16,6 +16,13 @@ Spot the bridge flows that actually land on Solana with deployable capital behin
 
 Ingress Console • Ingress Alert • Operating Surfaces • Why Nexus Exists • Real Ingress • Technical Spec • Quick Start
 
+## At a Glance
+
+- `Use case`: filter bridge noise into deployable Solana ingress
+- `Primary input`: landed size, stablecoin share, corridor concentration, landing quality
+- `Primary failure mode`: confusing parked bridge inventory with real market fuel
+- `Best for`: operators tracking whether capital is arriving in a usable form
+
 ## Ingress Console
 
 ![Nexus flow map](assets/preview-flow.svg)
@@ -54,6 +61,18 @@ The console is trying to answer one narrow question: if this size landed on Sola
 - `Landing Quality` tells you whether that size still looks usable
 - `Ingress Alert` is the moment an operator would actually escalate the event
 
+## How It Works
+
+Nexus processes ingress in a straightforward order:
+
+1. measure inbound and outbound bridge flow around Solana
+2. isolate the corridors carrying the meaningful size
+3. check how much of that inbound flow is stablecoin-dominant
+4. discount transfers that look circular, parked, or overly crowded
+5. promote the routes that still look deployable after landing
+
+The key distinction is not whether capital moved. It is whether the capital still matters once it is on Solana.
+
 ## Typical Operator Questions
 
 Nexus is useful when the market starts asking questions like:
@@ -64,6 +83,20 @@ Nexus is useful when the market starts asking questions like:
 - does the landed capital still look deployable into the market now
 
 Those are better questions than simply watching gross bridge size.
+
+## Example Output
+
+```text
+NEXUS // INGRESS ALERT
+
+lead corridor      BASE -> SOL
+net landed flow    $1.85m
+stablecoin share   67%
+corridor share     64%
+landing quality    ready to deploy
+
+operator note: inbound capital looks usable, but monitor corridor crowding on the next cycle
+```
 
 ## Technical Spec
 
@@ -95,6 +128,15 @@ Those are better questions than simply watching gross bridge size.
 - landing quality still looks good after the transfer settles
 
 If those conditions are not present, the board should downgrade the event quickly.
+
+## Risk Controls
+
+- `stablecoin quality gate`: discounts inbound flow that arrives as non-deployable inventory
+- `corridor concentration cap`: prevents one overheated route from being treated as clean signal
+- `roundtrip churn filter`: rejects capital that is only touching Solana briefly
+- `landing quality filter`: requires the flow to still look usable after arrival
+
+Nexus is supposed to miss noisy transfers on purpose. A false ingress read wastes attention exactly when the market is busiest.
 
 ## Why Nexus Matters
 
