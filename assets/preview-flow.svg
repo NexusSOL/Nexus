@@ -1,24 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" fill="none">
   <rect width="960" height="520" fill="#0E1623"/>
   <rect x="24" y="24" width="912" height="472" rx="28" fill="#162232" stroke="#2A4054"/>
-  <text x="56" y="72" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="24" font-weight="700">Nexus // Solana Ingress Map</text>
+  <text x="56" y="72" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="24" font-weight="700">Nexus // Solana Ingress Board</text>
   <text x="56" y="98" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">deployable Solana ingress filtered by route concentration and stablecoin mix</text>
-  <circle cx="180" cy="250" r="72" fill="#203348" stroke="#3A5A76"/>
-  <text x="145" y="256" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="24" font-weight="700">ETH</text>
-  <circle cx="420" cy="170" r="66" fill="#203348" stroke="#3A5A76"/>
-  <text x="388" y="176" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="22" font-weight="700">BASE</text>
-  <circle cx="700" cy="250" r="92" fill="#1B3C52" stroke="#47A3C2"/>
-  <text x="655" y="256" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="28" font-weight="700">SOLANA</text>
-  <path d="M248 232 C340 206 462 206 608 232" stroke="#7DE0C3" stroke-width="8" stroke-linecap="round"/>
-  <path d="M484 182 C560 188 610 206 642 224" stroke="#F5C568" stroke-width="8" stroke-linecap="round"/>
-  <text x="350" y="198" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="13">$1.6m USDC ingress</text>
-  <text x="534" y="172" fill="#F5C568" font-family="Arial, sans-serif" font-size="13">Base route share 64%</text>
-  <rect x="84" y="344" width="760" height="108" rx="18" fill="#102031" stroke="#2A4054"/>
-  <text x="108" y="374" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="15" font-weight="700">Ingress Diagnostics</text>
-  <text x="108" y="404" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">net Solana flow</text>
-  <text x="240" y="404" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="13">$1.85m</text>
-  <text x="356" y="404" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">stablecoin share</text>
-  <text x="498" y="404" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="13">67%</text>
-  <text x="590" y="404" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">route concentration</text>
-  <text x="754" y="404" fill="#F5C568" font-family="Arial, sans-serif" font-size="13">64%</text>
+
+  <rect x="58" y="132" width="220" height="184" rx="20" fill="#112031" stroke="#284158"/>
+  <text x="82" y="164" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="16" font-weight="700">Source Chains</text>
+
+  <rect x="82" y="188" width="172" height="46" rx="12" fill="#203348" stroke="#3A5A76"/>
+  <text x="106" y="217" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="20" font-weight="700">ETH</text>
+  <text x="176" y="217" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">inventory leg</text>
+
+  <rect x="82" y="248" width="172" height="46" rx="12" fill="#203348" stroke="#3A5A76"/>
+  <text x="106" y="277" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="20" font-weight="700">BASE</text>
+  <text x="184" y="277" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">stablecoin leg</text>
+
+  <rect x="316" y="132" width="266" height="184" rx="20" fill="#102031" stroke="#2A4054"/>
+  <text x="340" y="164" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="16" font-weight="700">Bridge Router</text>
+
+  <rect x="340" y="188" width="218" height="46" rx="12" fill="#183147" stroke="#315570"/>
+  <text x="360" y="207" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="12">stablecoin ingress</text>
+  <text x="360" y="224" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="15" font-weight="700">BASE -&gt; SOLANA</text>
+  <text x="500" y="224" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="12">$1.60m</text>
+
+  <rect x="340" y="248" width="218" height="46" rx="12" fill="#183147" stroke="#315570"/>
+  <text x="360" y="267" fill="#F5C568" font-family="Arial, sans-serif" font-size="12">route share</text>
+  <text x="360" y="284" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="15" font-weight="700">ETH + BASE blended path</text>
+  <text x="500" y="284" fill="#F5C568" font-family="Arial, sans-serif" font-size="12">64%</text>
+
+  <line x1="254" y1="211" x2="340" y2="211" stroke="#7DE0C3" stroke-width="6" stroke-linecap="round"/>
+  <line x1="254" y1="271" x2="340" y2="271" stroke="#F5C568" stroke-width="6" stroke-linecap="round"/>
+  <line x1="558" y1="211" x2="650" y2="211" stroke="#7DE0C3" stroke-width="6" stroke-linecap="round"/>
+  <line x1="558" y1="271" x2="650" y2="271" stroke="#F5C568" stroke-width="6" stroke-linecap="round"/>
+
+  <rect x="650" y="132" width="246" height="184" rx="20" fill="#173148" stroke="#47A3C2"/>
+  <text x="676" y="164" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="16" font-weight="700">Solana Landing</text>
+  <text x="676" y="198" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="36" font-weight="700">SOLANA</text>
+  <text x="676" y="226" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">deployable net flow $1.85m</text>
+  <rect x="676" y="250" width="182" height="16" rx="8" fill="#234762"/>
+  <rect x="676" y="250" width="122" height="16" rx="8" fill="#7DE0C3"/>
+  <text x="676" y="290" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="12">stablecoin share 67%</text>
+
+  <rect x="58" y="344" width="838" height="108" rx="18" fill="#102031" stroke="#2A4054"/>
+  <text x="84" y="376" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="15" font-weight="700">Ingress Diagnostics</text>
+
+  <rect x="84" y="392" width="170" height="36" rx="10" fill="#162A3D"/>
+  <text x="102" y="414" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">net Solana flow</text>
+  <text x="208" y="414" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="12">$1.85m</text>
+
+  <rect x="274" y="392" width="170" height="36" rx="10" fill="#162A3D"/>
+  <text x="292" y="414" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">stablecoin share</text>
+  <text x="404" y="414" fill="#7DE0C3" font-family="Arial, sans-serif" font-size="12">67%</text>
+
+  <rect x="464" y="392" width="186" height="36" rx="10" fill="#162A3D"/>
+  <text x="482" y="414" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">route concentration</text>
+  <text x="610" y="414" fill="#F5C568" font-family="Arial, sans-serif" font-size="12">64%</text>
+
+  <rect x="670" y="392" width="200" height="36" rx="10" fill="#162A3D"/>
+  <text x="688" y="414" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">inventory quality</text>
+  <text x="792" y="414" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="12">deployable, not parked</text>
 </svg>
