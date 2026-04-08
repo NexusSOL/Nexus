@@ -2,20 +2,32 @@
 
 Bridge-ingress radar for Solana capital flows.
 
-Nexus tracks whether bridged capital is actually deployable into Solana. Instead of treating every large transfer as signal, it scores stablecoin share, route concentration, and net Solana ingress quality before escalating the event.
-It is meant to distinguish durable inbound positioning from temporary bridge inventory.
+Spot the bridge flows that actually land on Solana with deployable capital behind them.
+
+`bun run dev`
+
+- watches landed size, stablecoin share, corridor concentration, and landing quality
+- ignores circular bridge churn and parked inventory that never turns into positioning
+- promotes inbound capital that still looks deployable after it reaches Solana
 
 [![Build](https://img.shields.io/github/actions/workflow/status/NexusSOL/Nexus/ci.yml?branch=master&style=flat-square&label=Build)](https://github.com/NexusSOL/Nexus/actions)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
-## Flow Map
+## Ingress Console
 
 ![Nexus flow map](assets/preview-flow.svg)
 
 ## Ingress Alert
 
 ![Nexus anomaly card](assets/preview-anomaly.svg)
+
+## Operating Surfaces
+
+- `Topline`: compresses landed flow, stablecoin share, corridor share, and status into one strip
+- `Route Leaderboard`: ranks the corridors carrying deployable capital into Solana
+- `Landing Quality`: separates ready capital from idle bridge inventory
+- `Ingress Alert`: prints the actual event the operator sees when a route is promoted
 
 ## Why Nexus Exists
 
@@ -69,6 +81,13 @@ SCAN_INTERVAL_MS=120000
 
 - [Commit sequence](docs/commit-sequence.md)
 - [Issue drafts](docs/issue-drafts.md)
+
+## Support Docs
+
+- [Runbook](docs/runbook.md)
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security](SECURITY.md)
 
 ## License
 
