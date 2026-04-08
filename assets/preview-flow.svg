@@ -25,7 +25,7 @@
 
   <rect x="340" y="248" width="218" height="46" rx="12" fill="#183147" stroke="#315570"/>
   <text x="360" y="267" fill="#F5C568" font-family="Arial, sans-serif" font-size="12">route share</text>
-  <text x="360" y="284" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="15" font-weight="700">ETH + BASE blended path</text>
+  <text x="360" y="284" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="15" font-weight="700">ETH + BASE blended</text>
   <text x="500" y="284" fill="#F5C568" font-family="Arial, sans-serif" font-size="12">64%</text>
 
   <line x1="254" y1="211" x2="340" y2="211" stroke="#7DE0C3" stroke-width="6" stroke-linecap="round"/>
@@ -58,5 +58,5 @@
 
   <rect x="670" y="392" width="200" height="36" rx="10" fill="#162A3D"/>
   <text x="688" y="414" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="12">inventory quality</text>
-  <text x="792" y="414" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="12">deployable, not parked</text>
+  <text x="772" y="414" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="12">ready to deploy</text>
 </svg>
