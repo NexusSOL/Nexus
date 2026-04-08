@@ -2,7 +2,7 @@
   <rect width="960" height="520" fill="#0E1623"/>
   <rect x="24" y="24" width="912" height="472" rx="28" fill="#162232" stroke="#2A4054"/>
   <text x="56" y="72" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="24" font-weight="700">Nexus // Solana Ingress Map</text>
-  <text x="56" y="98" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">bridge netflow, stablecoin share, route concentration</text>
+  <text x="56" y="98" fill="#8FA9C0" font-family="Arial, sans-serif" font-size="13">deployable Solana ingress filtered by route concentration and stablecoin mix</text>
   <circle cx="180" cy="250" r="72" fill="#203348" stroke="#3A5A76"/>
   <text x="145" y="256" fill="#EDF3FB" font-family="Arial, sans-serif" font-size="24" font-weight="700">ETH</text>
   <circle cx="420" cy="170" r="66" fill="#203348" stroke="#3A5A76"/>
