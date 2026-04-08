@@ -13,34 +13,35 @@ const CYAN = "\x1b[36m";
 const DIM = "\x1b[2m";
 
 function printAnomalies(anomalies: BridgeAnomaly[]): void {
-  const bar = "─".repeat(68);
+  const bar = "─".repeat(72);
   console.log(`\n${bar}`);
-  console.log(`  ${BOLD}NEXUS — BRIDGE ANOMALY MONITOR${RESET}  (${anomalies.length} detected)`);
+  console.log(`  ${BOLD}NEXUS -- SOLANA INGRESS RADAR${RESET}  (${anomalies.length} detected)`);
   console.log(bar);
 
   if (anomalies.length === 0) {
-    console.log(`  ${DIM}no anomalies detected this cycle${RESET}`);
+    console.log(`  ${DIM}no bridge-ingress anomalies detected this cycle${RESET}`);
   } else {
-    for (const a of anomalies) {
-      const color = a.severity === "high" ? RED : a.severity === "medium" ? ORANGE : CYAN;
-      const tx = a.transfer;
-      console.log(`\n  ${BOLD}${color}[${a.severity.toUpperCase()}]${RESET} ${a.type.replace(/_/g, " ")}`);
-      console.log(`     ${tx.fromChain} → ${tx.toChain}  ${tx.bridge}  ${tx.token}  $${(tx.amountUsd / 1000).toFixed(0)}K`);
-      console.log(`     ${a.description}`);
-      console.log(`     ${BOLD}→ ${a.recommendation}${RESET}`);
-      console.log(`     ${DIM}conf=${a.confidence.toFixed(2)}  ${tx.txHash.slice(0, 12)}…${RESET}`);
+    for (const anomaly of anomalies) {
+      const color = anomaly.severity === "high" ? RED : anomaly.severity === "medium" ? ORANGE : CYAN;
+      const transfer = anomaly.transfer;
+      console.log(`\n  ${BOLD}${color}[${anomaly.severity.toUpperCase()}]${RESET} ${anomaly.type.replace(/_/g, " ")}`);
+      console.log(`     ${transfer.fromChain}->${transfer.toChain}  ${transfer.token}  $${(transfer.amountUsd / 1_000).toFixed(0)}K  stablecoin=${transfer.stablecoin ? "yes" : "no"}`);
+      console.log(`     ${anomaly.description}`);
+      console.log(`     ${BOLD}-> ${anomaly.recommendation}${RESET}`);
+      console.log(`     ${DIM}conf=${anomaly.confidence.toFixed(2)}  ${transfer.txHash.slice(0, 12)}...${RESET}`);
     }
   }
   console.log(`\n${bar}\n`);
 }
 
 async function scan(): Promise<void> {
-  log.info("Fetching Wormhole transfers...");
+  log.info("Fetching Wormhole bridge transfers...");
   const transfers = await fetchWormholeTransfers(2);
   const netflows = computeNetflows(transfers, 2);
   const large = getLargeTransfers(transfers, config.LARGE_TRANSFER_THRESHOLD_USD);
+  const solana = netflows.find((flow) => flow.chain === "solana" && flow.netUsd > 0);
 
-  log.info(`${transfers.length} transfers · ${large.length} large (>${config.LARGE_TRANSFER_THRESHOLD_USD / 1000}K)`);
+  log.info(`${transfers.length} transfers | ${large.length} large | Solana net ${solana ? `$${(solana.netUsd / 1_000_000).toFixed(2)}M` : "$0.00M"}`);
 
   if (transfers.length === 0) return;
 
@@ -49,11 +50,14 @@ async function scan(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  log.info("Nexus v0.1.0 — bridge monitor starting");
-  log.info(`Bridges: ${config.TRACKED_BRIDGES} · Threshold: $${config.LARGE_TRANSFER_THRESHOLD_USD.toLocaleString()}`);
+  log.info("Nexus v0.2.0 -- Solana bridge-ingress radar starting");
+  log.info(`Min ingress: $${config.MIN_SOLANA_INGRESS_USD.toLocaleString()} | route concentration cap: ${config.ROUTE_CONCENTRATION_THRESHOLD_PCT}%`);
 
   await scan();
-  setInterval(() => scan().catch((e) => log.error("Scan error:", e)), config.SCAN_INTERVAL_MS);
+  setInterval(() => scan().catch((error) => log.error("Scan error:", error)), config.SCAN_INTERVAL_MS);
 }
 
-main().catch((e) => { log.error("Fatal:", e); process.exit(1); });
+main().catch((error) => {
+  log.error("Fatal:", error);
+  process.exit(1);
+});

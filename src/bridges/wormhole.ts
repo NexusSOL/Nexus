@@ -9,18 +9,18 @@ const WORMHOLE_CHAIN_MAP: Record<number, SupportedChain> = {
   21: "sui",
 };
 
+const STABLECOINS = new Set(["USDC", "USDT", "USDe", "USDY", "PYUSD"]);
+
 interface WormholeTransaction {
   id: string;
   emitterChain: number;
   targetChain: number;
-  tokenAmount: string;
   usdAmount: string;
   tokenSymbol: string;
   emitterAddress: string;
   toAddress: string;
   txHash: string;
   timestamp: string;
-  status: string;
 }
 
 export async function fetchWormholeTransfers(hours = 1): Promise<BridgeTransfer[]> {
@@ -34,29 +34,28 @@ export async function fetchWormholeTransfers(hours = 1): Promise<BridgeTransfer[
   if (!res.ok) throw new Error(`Wormhole API ${res.status}`);
 
   const data = await res.json() as { transactions: WormholeTransaction[] };
-  const transfers: BridgeTransfer[] = [];
 
-  for (const tx of data.transactions ?? []) {
+  return (data.transactions ?? []).flatMap((tx) => {
     const fromChain = WORMHOLE_CHAIN_MAP[tx.emitterChain];
     const toChain = WORMHOLE_CHAIN_MAP[tx.targetChain];
-    if (!fromChain || !toChain) continue;
+    if (!fromChain || !toChain) return [];
 
     const amountUsd = parseFloat(tx.usdAmount ?? "0");
-    if (amountUsd <= 0) continue;
+    if (amountUsd <= 0) return [];
 
-    transfers.push({
+    const token = tx.tokenSymbol ?? "UNKNOWN";
+    return [{
       id: tx.id,
       bridge: "wormhole",
       fromChain,
       toChain,
-      token: tx.tokenSymbol ?? "UNKNOWN",
+      token,
       amountUsd,
       sender: tx.emitterAddress,
       recipient: tx.toAddress ?? "",
       txHash: tx.txHash,
       timestamp: new Date(tx.timestamp).getTime(),
-    });
-  }
-
-  return transfers;
+      stablecoin: STABLECOINS.has(token),
+    }];
+  });
 }

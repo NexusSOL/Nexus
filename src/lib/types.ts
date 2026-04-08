@@ -1,6 +1,6 @@
 export type SupportedChain = "solana" | "ethereum" | "base" | "arbitrum" | "sui";
 export type BridgeName = "wormhole" | "allbridge" | "debridge" | "portal";
-export type AnomalyType = "large_transfer" | "rapid_roundtrip" | "unusual_chain" | "suspicious_timing" | "volume_spike";
+export type AnomalyType = "solana_ingress" | "roundtrip_churn" | "route_concentration" | "suspicious_timing" | "deployable_stablecoin";
 
 export interface BridgeTransfer {
   id: string;
@@ -13,7 +13,7 @@ export interface BridgeTransfer {
   recipient: string;
   txHash: string;
   timestamp: number;
-  completedAt?: number;
+  stablecoin: boolean;
 }
 
 export interface ChainNetflow {
@@ -22,6 +22,9 @@ export interface ChainNetflow {
   inboundUsd: number;
   outboundUsd: number;
   netUsd: number;
+  stablecoinInboundUsd: number;
+  stablecoinSharePct: number;
+  routeConcentrationPct: number;
   transferCount: number;
   windowHours: number;
   updatedAt: number;

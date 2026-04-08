@@ -10,7 +10,7 @@ const client = new Anthropic({ apiKey: config.ANTHROPIC_API_KEY });
 const tools: Anthropic.Tool[] = [
   {
     name: "get_transfer_overview",
-    description: "Get a summary of all bridge transfers this cycle: total volume, largest transfers, chain breakdown",
+    description: "Get a summary of bridge transfers and Solana ingress quality for this cycle",
     input_schema: { type: "object" as const, properties: {} },
   },
   {
@@ -20,7 +20,7 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: "get_chain_netflows",
-    description: "Get net flow direction (inbound/outbound) per chain this cycle",
+    description: "Get net flow, stablecoin share, and route concentration per chain",
     input_schema: { type: "object" as const, properties: {} },
   },
   {
@@ -34,15 +34,12 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: "emit_anomaly",
-    description: "Flag a bridge activity anomaly",
+    description: "Flag a bridge-ingress anomaly",
     input_schema: {
       type: "object" as const,
       properties: {
         transfer_id: { type: "string" },
-        type: {
-          type: "string",
-          enum: ["large_transfer", "rapid_roundtrip", "unusual_chain", "suspicious_timing", "volume_spike"],
-        },
+        type: { type: "string", enum: ["solana_ingress", "roundtrip_churn", "route_concentration", "suspicious_timing", "deployable_stablecoin"] },
         severity: { type: "string", enum: ["low", "medium", "high"] },
         description: { type: "string" },
         recommendation: { type: "string" },
@@ -53,18 +50,15 @@ const tools: Anthropic.Tool[] = [
   },
 ];
 
-export async function runNexusAgent(
-  transfers: BridgeTransfer[],
-  netflows: ChainNetflow[]
-): Promise<BridgeAnomaly[]> {
+export async function runNexusAgent(transfers: BridgeTransfer[], netflows: ChainNetflow[]): Promise<BridgeAnomaly[]> {
   const anomalies: BridgeAnomaly[] = [];
-  const byId = new Map(transfers.map((t) => [t.id, t]));
-  const large = transfers.filter((t) => t.amountUsd >= config.LARGE_TRANSFER_THRESHOLD_USD);
+  const byId = new Map(transfers.map((transfer) => [transfer.id, transfer]));
+  const large = transfers.filter((transfer) => transfer.amountUsd >= config.LARGE_TRANSFER_THRESHOLD_USD);
 
   const messages: Anthropic.MessageParam[] = [
     {
       role: "user",
-      content: `Scan complete. ${transfers.length} bridge transfers in last 2h. ${large.length} exceed $${(config.LARGE_TRANSFER_THRESHOLD_USD / 1000).toFixed(0)}K threshold. Analyze and flag anomalies.`,
+      content: `Scan complete. ${transfers.length} bridge transfers in the last 2h. Focus on Solana ingress quality, stablecoin deployability, and crowded routes.`,
     },
   ];
 
@@ -88,37 +82,40 @@ export async function runNexusAgent(
       let result = "";
 
       if (block.name === "get_transfer_overview") {
-        const totalUsd = transfers.reduce((a, t) => a + t.amountUsd, 0);
+        const solanaFlow = netflows.find((flow) => flow.chain === "solana" && flow.netUsd > 0);
         result = JSON.stringify({
           totalTransfers: transfers.length,
-          totalVolumeUsd: `$${(totalUsd / 1_000_000).toFixed(2)}M`,
           largeTransfers: large.length,
-          bridges: [...new Set(transfers.map((t) => t.bridge))],
-          chainPairs: transfers.slice(0, 5).map((t) => `${t.fromChain}→${t.toChain} $${(t.amountUsd / 1000).toFixed(0)}K`),
+          solanaNetUsd: solanaFlow ? `$${(solanaFlow.netUsd / 1_000_000).toFixed(2)}M` : "$0.00M",
+          stablecoinSharePct: solanaFlow?.stablecoinSharePct.toFixed(1) ?? "0.0",
+          routeConcentrationPct: solanaFlow?.routeConcentrationPct.toFixed(1) ?? "0.0",
         });
       } else if (block.name === "get_large_transfers") {
-        result = JSON.stringify(large.map((t) => ({
-          id: t.id,
-          route: `${t.fromChain}→${t.toChain}`,
-          token: t.token,
-          amountUsd: `$${(t.amountUsd / 1000).toFixed(0)}K`,
-          bridge: t.bridge,
-          sender: t.sender.slice(0, 12) + "…",
+        result = JSON.stringify(large.map((transfer) => ({
+          id: transfer.id,
+          route: `${transfer.fromChain}->${transfer.toChain}`,
+          token: transfer.token,
+          amountUsd: `$${(transfer.amountUsd / 1_000).toFixed(0)}K`,
+          stablecoin: transfer.stablecoin,
+          bridge: transfer.bridge,
         })));
       } else if (block.name === "get_chain_netflows") {
-        result = JSON.stringify(netflows.map((f) => ({
-          chain: f.chain,
-          bridge: f.bridge,
-          inbound: `$${(f.inboundUsd / 1000).toFixed(0)}K`,
-          outbound: `$${(f.outboundUsd / 1000).toFixed(0)}K`,
-          net: `${f.netUsd >= 0 ? "+" : ""}$${(f.netUsd / 1000).toFixed(0)}K`,
+        result = JSON.stringify(netflows.map((flow) => ({
+          chain: flow.chain,
+          bridge: flow.bridge,
+          netUsd: `${flow.netUsd >= 0 ? "+" : ""}$${(flow.netUsd / 1_000).toFixed(0)}K`,
+          stablecoinSharePct: flow.stablecoinSharePct.toFixed(1),
+          routeConcentrationPct: flow.routeConcentrationPct.toFixed(1),
         })));
       } else if (block.name === "get_transfer_detail") {
-        const tx = byId.get(input.transfer_id as string);
-        result = tx ? JSON.stringify(tx) : "not found";
+        const transfer = byId.get(input.transfer_id as string);
+        result = transfer ? JSON.stringify(transfer) : "not found";
       } else if (block.name === "emit_anomaly") {
-        const tx = byId.get(input.transfer_id as string);
-        if (!tx) { result = "transfer not found"; continue; }
+        const transfer = byId.get(input.transfer_id as string);
+        if (!transfer) {
+          result = "transfer not found";
+          continue;
+        }
         if ((input.confidence as number) < config.ALERT_MIN_CONFIDENCE) {
           result = JSON.stringify({ accepted: false, reason: "below confidence threshold" });
           continue;
@@ -126,7 +123,7 @@ export async function runNexusAgent(
         const anomaly: BridgeAnomaly = {
           id: crypto.randomUUID(),
           type: input.type as AnomalyType,
-          transfer: tx,
+          transfer,
           severity: input.severity as BridgeAnomaly["severity"],
           description: input.description as string,
           recommendation: input.recommendation as string,
@@ -134,7 +131,7 @@ export async function runNexusAgent(
           detectedAt: Date.now(),
         };
         anomalies.push(anomaly);
-        log.warn(`Anomaly [${anomaly.severity}] ${anomaly.type} — ${tx.fromChain}→${tx.toChain} $${(tx.amountUsd / 1000).toFixed(0)}K`);
+        log.warn(`Anomaly [${anomaly.severity}] ${anomaly.type} ${transfer.fromChain}->${transfer.toChain} $${(transfer.amountUsd / 1_000).toFixed(0)}K`);
         result = JSON.stringify({ id: anomaly.id, accepted: true });
       }
 

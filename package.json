@@ -2,6 +2,15 @@
   "name": "nexus",
   "version": "0.1.0",
   "description": "Cross-chain bridge monitor — tracks asset flows between Solana and EVM chains, detects anomalies using Claude",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NexusSOL/Nexus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NexusSOL/Nexus/issues"
+  },
+  "homepage": "https://github.com/NexusSOL/Nexus#readme",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

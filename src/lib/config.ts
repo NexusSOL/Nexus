@@ -1,5 +1,6 @@
 import { z } from "zod";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const schema = z.object({
@@ -8,7 +9,9 @@ const schema = z.object({
   CLAUDE_MODEL: z.string().default("claude-sonnet-4-6"),
   SCAN_INTERVAL_MS: z.coerce.number().default(120_000),
   LARGE_TRANSFER_THRESHOLD_USD: z.coerce.number().default(500_000),
-  VOLUME_SPIKE_MULTIPLIER: z.coerce.number().default(5),
+  ROUTE_CONCENTRATION_THRESHOLD_PCT: z.coerce.number().default(62),
+  MIN_SOLANA_INGRESS_USD: z.coerce.number().default(1_000_000),
+  DEPLOYABLE_STABLECOIN_SHARE_PCT: z.coerce.number().default(45),
   ALERT_MIN_CONFIDENCE: z.coerce.number().default(0.65),
   TRACKED_BRIDGES: z.string().default("wormhole,allbridge"),
   TRACKED_CHAINS: z.string().default("solana,ethereum,base,arbitrum"),
