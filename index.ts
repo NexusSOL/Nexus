@@ -41,7 +41,7 @@ async function scan(): Promise<void> {
   const large = getLargeTransfers(transfers, config.LARGE_TRANSFER_THRESHOLD_USD);
   const solana = netflows.find((flow) => flow.chain === "solana" && flow.netUsd > 0);
 
-  log.info(`${transfers.length} transfers | ${large.length} large | Solana net ${solana ? `$${(solana.netUsd / 1_000_000).toFixed(2)}M` : "$0.00M"}`);
+  log.info(`${transfers.length} transfers | ${large.length} large | Solana deployable net ${solana ? `$${(solana.netUsd / 1_000_000).toFixed(2)}M` : "$0.00M"}`);
 
   if (transfers.length === 0) return;
 

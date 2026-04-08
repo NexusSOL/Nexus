@@ -8,6 +8,7 @@ Priorities:
 - route_concentration: most inbound flow comes through one route, increasing event risk
 - roundtrip_churn: funds bridge in and out quickly, suggesting arb or temporary inventory
 - suspicious_timing: concentrated flow right before a market catalyst
+- Demote alerts when the flow is large but clearly looks like bridge inventory rotation rather than fresh deployment
 
 Severity:
 - high: >$1M meaningful ingress, or concentrated deployable stablecoin flow
