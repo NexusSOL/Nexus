@@ -13,3 +13,5 @@ Title: `Need same-sender roundtrip detection across bridge wrappers`
 
 Body:
 The current roundtrip logic will miss inventory churn when a desk uses multiple wrapper addresses or recipient relays. We should cluster sender-recipient patterns so transient flow does not get mislabeled as fresh deployment.
+
+Backlog note: validate both items against real Wormhole route clusters before promoting them into the default scan loop.

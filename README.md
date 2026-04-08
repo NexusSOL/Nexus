@@ -3,6 +3,7 @@
 Bridge-ingress radar for Solana capital flows.
 
 Nexus tracks whether bridged capital is actually deployable into Solana. Instead of treating every large transfer as signal, it scores stablecoin share, route concentration, and net Solana ingress quality before escalating the event.
+It is meant to distinguish durable inbound positioning from temporary bridge inventory.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/NexusSOL/Nexus/ci.yml?branch=master&style=flat-square&label=Build)](https://github.com/NexusSOL/Nexus/actions)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)

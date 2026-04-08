@@ -10,3 +10,5 @@
 8. `docs(readme): add technical spec for bridge-ingress scoring`
 9. `design(svg): add observability map and anomaly hero`
 10. `chore(audit): add issue drafts and commit notes`
+
+Operational note: keep bridge feed, scoring, and presentation commits separated so the ingress history stays legible.
