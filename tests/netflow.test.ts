@@ -58,4 +58,14 @@ describe("large transfer detection", () => {
     const large = getLargeTransfers(transfers, 500_000);
     expect(large).toHaveLength(2);
   });
+
+  it("keeps the largest deployable transfer first", async () => {
+    const { getLargeTransfers } = await import("../src/monitor/netflow.js");
+    const transfers = [
+      makeTransfer("ethereum", "solana", 650_000, true),
+      makeTransfer("base", "solana", 1_400_000, true),
+    ];
+    const large = getLargeTransfers(transfers, 500_000);
+    expect(large[0]?.amountUsd).toBe(1_400_000);
+  });
 });
