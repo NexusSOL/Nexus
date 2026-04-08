@@ -14,6 +14,8 @@ Spot the bridge flows that actually land on Solana with deployable capital behin
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
+Ingress Console • Ingress Alert • Operating Surfaces • Why Nexus Exists • Real Ingress • Technical Spec • Quick Start
+
 ## Ingress Console
 
 ![Nexus flow map](assets/preview-flow.svg)
@@ -28,6 +30,12 @@ Spot the bridge flows that actually land on Solana with deployable capital behin
 - `Route Leaderboard`: ranks the corridors carrying deployable capital into Solana
 - `Landing Quality`: separates ready capital from idle bridge inventory
 - `Ingress Alert`: prints the actual event the operator sees when a route is promoted
+
+## What Nexus Watches That Other Dashboards Ignore
+
+Most bridge boards are happy to tell you that capital moved. That is not enough. Big transfers can be inventory management, arb routing, exchange reshuffling, or capital that never actually expresses itself inside Solana after landing.
+
+Nexus is more selective. It wants to know whether the flow arrived in a form that still looks usable by the time it reaches Solana. That means stablecoin-heavy, low-churn, and not obviously trapped inside one crowded corridor.
 
 ## Why Nexus Exists
 
@@ -45,6 +53,17 @@ The console is trying to answer one narrow question: if this size landed on Sola
 - `Route Leaderboard` shows which corridor is carrying the real size
 - `Landing Quality` tells you whether that size still looks usable
 - `Ingress Alert` is the moment an operator would actually escalate the event
+
+## Typical Operator Questions
+
+Nexus is useful when the market starts asking questions like:
+
+- is this capital really landing on Solana, or only touching it briefly
+- is the inbound flow mostly stablecoins or mostly inventory
+- is one route becoming so crowded that the signal is losing value
+- does the landed capital still look deployable into the market now
+
+Those are better questions than simply watching gross bridge size.
 
 ## Technical Spec
 
@@ -67,6 +86,15 @@ The console is trying to answer one narrow question: if this size landed on Sola
 - `route_concentration`: one route is carrying most of the flow
 - `roundtrip_churn`: bridge activity looks transient rather than committed
 - `suspicious_timing`: concentrated flow before a catalyst window
+
+## What A Strong Nexus Alert Looks Like
+
+- net Solana inflow is meaningfully positive
+- stablecoin share is high enough to imply usable dry powder
+- the lead corridor is clear, but not so dominant that it looks crowded
+- landing quality still looks good after the transfer settles
+
+If those conditions are not present, the board should downgrade the event quickly.
 
 ## Why Nexus Matters
 
