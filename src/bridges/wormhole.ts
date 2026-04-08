@@ -34,11 +34,15 @@ export async function fetchWormholeTransfers(hours = 1): Promise<BridgeTransfer[
   if (!res.ok) throw new Error(`Wormhole API ${res.status}`);
 
   const data = await res.json() as { transactions: WormholeTransaction[] };
+  const trackedChains = new Set(
+    config.TRACKED_CHAINS.split(",").map((chain) => chain.trim().toLowerCase()).filter(Boolean)
+  );
 
   return (data.transactions ?? []).flatMap((tx) => {
     const fromChain = WORMHOLE_CHAIN_MAP[tx.emitterChain];
     const toChain = WORMHOLE_CHAIN_MAP[tx.targetChain];
     if (!fromChain || !toChain) return [];
+    if (!trackedChains.has(fromChain) || !trackedChains.has(toChain)) return [];
 
     const amountUsd = parseFloat(tx.usdAmount ?? "0");
     if (amountUsd <= 0) return [];

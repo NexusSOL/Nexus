@@ -13,7 +13,7 @@ const schema = z.object({
   MIN_SOLANA_INGRESS_USD: z.coerce.number().default(1_000_000),
   DEPLOYABLE_STABLECOIN_SHARE_PCT: z.coerce.number().default(45),
   ALERT_MIN_CONFIDENCE: z.coerce.number().default(0.65),
-  TRACKED_BRIDGES: z.string().default("wormhole,allbridge"),
+  TRACKED_BRIDGES: z.string().default("wormhole"),
   TRACKED_CHAINS: z.string().default("solana,ethereum,base,arbitrum"),
 });
 
