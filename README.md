@@ -33,6 +33,19 @@ Spot the bridge flows that actually land on Solana with deployable capital behin
 
 Large bridge transfers are noisy on their own. The real question is whether capital is moving into Solana in a form that can be deployed quickly into memes, DeFi, or funding rotations.
 
+## What Counts As Real Ingress
+
+Nexus treats deployable stablecoin flow very differently from capital that is only passing through. A large bridge transfer can still be useless if it is parking, roundtripping, or crowding into one corridor that everyone else is already watching.
+
+The console is trying to answer one narrow question: if this size landed on Solana, does it still look like capital that can rotate into the market now?
+
+## How The Console Is Read
+
+- `Topline` tells you whether the board should matter at all
+- `Route Leaderboard` shows which corridor is carrying the real size
+- `Landing Quality` tells you whether that size still looks usable
+- `Ingress Alert` is the moment an operator would actually escalate the event
+
 ## Technical Spec
 
 ### Core Metrics
@@ -54,6 +67,12 @@ Large bridge transfers are noisy on their own. The real question is whether capi
 - `route_concentration`: one route is carrying most of the flow
 - `roundtrip_churn`: bridge activity looks transient rather than committed
 - `suspicious_timing`: concentrated flow before a catalyst window
+
+## Why Nexus Matters
+
+When Solana turns active, bridge dashboards get noisy fast. Nexus is deliberately opinionated about what matters because non-deployable flow wastes attention.
+
+It is better to miss a harmless bridge blip than to promote parked inventory as if it were real market fuel.
 
 ## Quick Start
 
