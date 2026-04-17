@@ -35,26 +35,61 @@ function printAnomalies(anomalies: BridgeAnomaly[]): void {
 }
 
 async function scan(): Promise<void> {
-  log.info("Fetching Wormhole bridge transfers...");
-  const transfers = await fetchWormholeTransfers(2);
-  const netflows = computeNetflows(transfers, 2);
-  const large = getLargeTransfers(transfers, config.LARGE_TRANSFER_THRESHOLD_USD);
-  const solana = netflows.find((flow) => flow.chain === "solana" && flow.netUsd > 0);
+  const startedAt = Date.now();
 
-  log.info(`${transfers.length} transfers | ${large.length} large | Solana deployable net ${solana ? `$${(solana.netUsd / 1_000_000).toFixed(2)}M` : "$0.00M"}`);
+  try {
+    log.info("Fetching Wormhole bridge transfers...");
+    const transfers = await fetchWormholeTransfers(2);
+    if (transfers.length === 0) {
+      log.info("No bridge transfers returned for this cycle");
+      return;
+    }
 
-  if (transfers.length === 0) return;
+    const netflows = computeNetflows(transfers, 2);
+    const large = getLargeTransfers(transfers, config.LARGE_TRANSFER_THRESHOLD_USD);
+    const solana = netflows.find((flow) => flow.chain === "solana" && flow.netUsd > 0);
 
-  const anomalies = await runNexusAgent(transfers, netflows);
-  printAnomalies(anomalies);
+    log.info(
+      `${transfers.length} transfers | ${large.length} large | Solana deployable net ${solana ? `$${(solana.netUsd / 1_000_000).toFixed(2)}M` : "$0.00M"}`,
+    );
+
+    const anomalies = await runNexusAgent(transfers, netflows);
+    if (anomalies.length === 0) {
+      log.info("No bridge-ingress anomalies met the alert threshold this cycle");
+      return;
+    }
+
+    printAnomalies(anomalies);
+  } finally {
+    const durationMs = Date.now() - startedAt;
+    log.info("Nexus scan complete", { durationMs });
+
+    if (durationMs > config.SCAN_INTERVAL_MS) {
+      log.warn("Nexus scan exceeded configured interval", {
+        durationMs,
+        intervalMs: config.SCAN_INTERVAL_MS,
+      });
+    }
+  }
 }
 
 async function main(): Promise<void> {
   log.info("Nexus v0.2.0 -- Solana bridge-ingress radar starting");
   log.info(`Min ingress: $${config.MIN_SOLANA_INGRESS_USD.toLocaleString()} | route concentration cap: ${config.ROUTE_CONCENTRATION_THRESHOLD_PCT}%`);
 
-  await scan();
-  setInterval(() => scan().catch((error) => log.error("Scan error:", error)), config.SCAN_INTERVAL_MS);
+  const runLoop = async (): Promise<void> => {
+    try {
+      await scan();
+    } catch (error) {
+      log.error("Scan error:", error);
+    } finally {
+      setTimeout(() => {
+        void runLoop();
+      }, config.SCAN_INTERVAL_MS);
+    }
+  };
+
+  await runLoop();
 }
 
 main().catch((error) => {
