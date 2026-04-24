@@ -42,6 +42,7 @@ export function computeNetflows(transfers: BridgeTransfer[], windowHours = 1): C
       updatedAt: Date.now(),
     };
     outbound.outboundUsd += transfer.amountUsd;
+    outbound.transferCount++;
     flowMap.set(outboundKey, outbound);
   }
 

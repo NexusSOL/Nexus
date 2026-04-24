@@ -34,6 +34,14 @@ describe("netflow computation", () => {
     expect(solana?.stablecoinSharePct).toBeCloseTo(66.67, 1);
   });
 
+  it("counts outbound-only transfers in source-chain flow stats", async () => {
+    const { computeNetflows } = await import("../src/monitor/netflow.js");
+    const flows = computeNetflows([makeTransfer("solana", "base", 750_000)]);
+    const solana = flows.find((flow) => flow.chain === "solana");
+    expect(solana?.outboundUsd).toBe(750_000);
+    expect(solana?.transferCount).toBe(1);
+  });
+
   it("tracks route concentration", async () => {
     const { computeNetflows } = await import("../src/monitor/netflow.js");
     const transfers = [
