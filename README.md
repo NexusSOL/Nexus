@@ -14,7 +14,7 @@ Spot the bridge flows that actually land on Solana with deployable capital behin
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
-Live Solana Ingress Console • Ingress Alert • Operating Surfaces • Why Nexus Exists • Real Ingress • Technical Spec • Quick Start
+Live Solana Ingress Console • Operating Surfaces • Why Nexus Exists • Real Ingress • Technical Spec • Quick Start
 
 ## At a Glance
 
@@ -28,10 +28,6 @@ Live Solana Ingress Console • Ingress Alert • Operating Surfaces • Why Nex
 <img src="assets/preview-main.png" alt="Nexus Live Solana Ingress Console" width="100%" />
 
 Live operating view for Nexus: route leaderboard across cross-chain corridors, live bridge-flow feed, selected corridor detail with stable share and route concentration, net-flow chart, guardrails, and the agent's current PROMOTE, WATCH, SUPPRESS, or OUTFLOW decision.
-
-## Ingress Alert
-
-![Nexus anomaly card](assets/preview-anomaly.svg)
 
 ## Operating Surfaces
 
