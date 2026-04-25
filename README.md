@@ -14,7 +14,7 @@ Spot the bridge flows that actually land on Solana with deployable capital behin
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
-Ingress Console • Ingress Alert • Operating Surfaces • Why Nexus Exists • Real Ingress • Technical Spec • Quick Start
+Live Solana Ingress Console • Ingress Alert • Operating Surfaces • Why Nexus Exists • Real Ingress • Technical Spec • Quick Start
 
 ## At a Glance
 
@@ -23,9 +23,11 @@ Ingress Console • Ingress Alert • Operating Surfaces • Why Nexus Exists �
 - `Primary failure mode`: confusing parked bridge inventory with real market fuel
 - `Best for`: operators tracking whether capital is arriving in a usable form
 
-## Ingress Console
+## Live Solana Ingress Console
 
-![Nexus flow map](assets/preview-flow.svg)
+<img src="assets/preview-main.png" alt="Nexus Live Solana Ingress Console" width="100%" />
+
+Live operating view for Nexus: route leaderboard across cross-chain corridors, live bridge-flow feed, selected corridor detail with stable share and route concentration, net-flow chart, guardrails, and the agent's current PROMOTE, WATCH, SUPPRESS, or OUTFLOW decision.
 
 ## Ingress Alert
 
